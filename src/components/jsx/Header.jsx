@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "../css/Header.css";
 
-// Mega menu content for each nav item
 const menuData = {
   men: {
     label: ["Men's", "Collection"],
@@ -58,6 +58,7 @@ export default function Header() {
   const [hovered, setHovered] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
   const leaveTimer = useRef(null);
+  const navigate = useNavigate();
 
   const openMenu = (id) => {
     clearTimeout(leaveTimer.current);
@@ -74,6 +75,13 @@ export default function Header() {
     }, 120);
   };
 
+  const handleNavClick = (e, key) => {
+    e.preventDefault();
+    setActiveMenu(null);
+    setHovered(false);
+    navigate(`/category/${key}`);
+  };
+
   return (
     <>
       <header
@@ -85,18 +93,18 @@ export default function Header() {
         }}
         onMouseLeave={scheduleClose}
       >
-        <a href="#" className="logo">
+        <Link to="/" className="logo">
           Vibe
-        </a>
+        </Link>
 
         <nav>
           {Object.keys(menuData).map((key) => (
             <a
               key={key}
-              href="#"
+              href={`/category/${key}`}
               className="nav-trigger"
               onMouseEnter={() => openMenu(key)}
-              onClick={(e) => e.preventDefault()}
+              onClick={(e) => handleNavClick(e, key)}
             >
               {key === "men" ? "Men" : "Women"}
             </a>
